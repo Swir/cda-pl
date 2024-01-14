@@ -58,6 +58,5 @@ class ProgramGUI:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.iconbitmap("icon.ico")  # Dodaj ikonę programu (icon.ico to przykładowa ścieżka, dostosuj ją)
     gui = ProgramGUI(root)
     root.mainloop()
