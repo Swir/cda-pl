@@ -1,7 +1,6 @@
 import tkinter as tk
-import requests
-from bs4 import BeautifulSoup
-import re
+from tkinter import messagebox
+import subprocess
 
 class ProgramGUI:
     def __init__(self, master):
@@ -20,55 +19,17 @@ class ProgramGUI:
     def pobierz_wideo(self):
         url = self.entry_url.get()
 
+        if not url:
+            messagebox.showwarning("Błąd", "Proszę podać link do strony CDA.")
+            return
+
         try:
-            linki_wideo_cda = self.pobierz_linki_wideo_cda(url)
-            
-            if linki_wideo_cda:
-                print("Znalezione linki wideo na CDA:")
-                for i, link in enumerate(linki_wideo_cda, start=1):
-                    print(f"{i}. {link}")
-
-                pobierz = input("Czy chcesz pobrać wideo? (tak/nie): ").lower()
-
-                if pobierz == 'tak':
-                    for i, link in enumerate(linki_wideo_cda, start=1):
-                        self.pobierz_wideo_cda(link, i)
-                    print("Wideo zostało pobrane.")
-                else:
-                    print("Koniec programu.")
-            else:
-                print("Nie znaleziono linków wideo na CDA.")
+            subprocess.run(["cda-dl", url], check=True)
+            messagebox.showinfo("Sukces", "Wideo zostało pobrane.")
+        except subprocess.CalledProcessError as e:
+            messagebox.showerror("Błąd", f"Błąd podczas pobierania wideo:\n{e}")
         except Exception as e:
-            print(f"Błąd podczas pobierania wideo: {e}")
-
-    def pobierz_linki_wideo_cda(self, url):
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
-
-        linki_wideo = []
-
-        # Przeszukaj tagi script
-        for script_tag in soup.find_all('script'):
-            script_content = script_tag.get_text()
-
-            # Wykorzystaj wyrażenie regularne do odnalezienia linków wideo
-            matches = re.findall(r'(https://[^"]+\.mp4)', script_content)
-
-            # Dodaj znalezione linki do listy
-            linki_wideo.extend(matches)
-
-        return linki_wideo
-
-    def pobierz_wideo_cda(self, link, numer):
-        print(f"Pobieranie wideo {numer}...")
-        response = requests.get(link)
-
-        # Zapisz plik wideo na dysku
-        nazwa_pliku = f"video_{numer}.mp4"
-        with open(nazwa_pliku, 'wb') as file:
-            file.write(response.content)
-
-        print(f"Wideo {numer} zostało pobrane i zapisane jako {nazwa_pliku}")
+            messagebox.showerror("Błąd", f"Niespodziewany błąd:\n{e}")
 
 if __name__ == "__main__":
     root = tk.Tk()
