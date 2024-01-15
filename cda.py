@@ -26,7 +26,7 @@ class VideoDownloader:
 class ProgramGUI:
     def __init__(self, master):
         self.master = master
-        master.title("Pobieranie Wideo CDA")
+        master.title("CDA downloader by Swir 1.0 ")
         master.configure(bg="#f0f0f0")  # Ustawienie koloru tła
         master.geometry("500x200")  # Ustawienie rozmiaru okna
 
@@ -58,6 +58,5 @@ class ProgramGUI:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.iconbitmap("icon.ico")  # Dodaj ikonę programu (icon.ico to przykładowa ścieżka, dostosuj ją)
     gui = ProgramGUI(root)
     root.mainloop()
