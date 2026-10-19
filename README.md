@@ -17,6 +17,12 @@
 
 </div>
 
+## 📸 Screenshot
+
+![cda-pl application screenshot](docs/screenshots/application.png)
+
+Initial application window on Windows.
+
 ## 📍 Project Status
 
 | Item | Status |
